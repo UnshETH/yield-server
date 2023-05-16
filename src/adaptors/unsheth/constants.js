@@ -26,8 +26,10 @@ const pancakeSwapSubgraphUrl = "https://data-platform.nodereal.io/graph/v1/a1db2
 const BLOCK_TIME_SECONDS = 12; // Approximate block time in seconds
 const BNB_BLOCK_TIME_SECONDS = 3;
 const feeRate = 0.003; // Sushi Swap Pool Fee
+const BLOCKS_PER_DAY = 6912 // ~ 24 hours on Ethereum mainnet
 
 module.exports = {
+    BLOCKS_PER_DAY,
     ETHEREUM_RPC_URL,
     BNB_BLOCK_TIME_SECONDS,
     pancakeSwapSubgraphUrl,
