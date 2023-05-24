@@ -34,12 +34,19 @@ async function getDepositAPR() {
     const unshETHContract = new ethers.Contract(contract_addresses.unshETH, unshETHABI, provider);
     const events = await unshETHContract.queryFilter('TokenMinterMinted', pastBlock.number, currentBlock);
 
+    const LSDVault = new ethers.Contract(contract_addresses.LSDVault, LSDVaultABI, provider);
+
+    const vdAMMAddress = await LSDVault.swapperAddress();
+    const vdamm = new ethers.Contract(vdAMMAddress, vdAMMABI, provider);
+
+    const darknetAddress = await LSDVault.darknetAddress();
+    const darknetContract = new ethers.Contract(darknetAddress, DarknetABI, provider);
+
     let totalFeeUSD = 0;
     for (const event of events) {
 
       const receipt = await provider.getTransactionReceipt(event.transactionHash);
       const blockNumber = receipt.blockNumber;
-      let vdamm = new ethers.Contract(contract_addresses.vdAMM, vdAMMABI, provider);
 
       for (const log of receipt.logs) {
         try {
@@ -57,7 +64,6 @@ async function getDepositAPR() {
               const eth_price = parseFloat(latestAnswer)/1e8;
 
               //use the checkPrice function of the darknet contract to the price of the token in terms of eth
-              const darknetContract = new ethers.Contract(contract_addresses.darknet, DarknetABI, provider);
               const lsdPrice = await darknetContract.checkPrice(log.address, {blockTag: blockNumber});
               const lsdPriceInEth = parseFloat(lsdPrice)/1e18;
               const lsdPriceInUSD = lsdPriceInEth * eth_price;
@@ -77,7 +83,6 @@ async function getDepositAPR() {
     const totalSupply = parseFloat(await unshETHContract.totalSupply());
 
     //get price of unshETH in USD
-    const LSDVault = new ethers.Contract(contract_addresses.LSDVault, LSDVaultABI, provider);
     const unshETHtoETH =  await LSDVault.stakedETHperunshETH();
 
     const chainlinkContract = new ethers.Contract(contract_addresses.chainlinkETHUSD, ChainlinkABI, provider);

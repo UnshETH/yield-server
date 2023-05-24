@@ -50,11 +50,6 @@ const getTVL = async() => {
 
   let totalTVL = await getTotalTVL();
 
-  console.log({
-    unshETHTotalSupply,
-    ARBunshETHTotalSupply,
-  });
-
   return totalTVL*ARBunshETHTotalSupply/unshETHTotalSupply;
 }
 

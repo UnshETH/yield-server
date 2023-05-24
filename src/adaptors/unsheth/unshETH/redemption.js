@@ -13,21 +13,25 @@ async function getRedemptionAPR() {
     const contract = new ethers.Contract(contract_addresses.unshETH, unshETHABI, provider);
     const events = await contract.queryFilter('TokenMinterBurned', pastBlock.number, currentBlock);
 
-    let totalBurned = 0;
+    let totalFee = 0;
     for (const event of events) {
       const amount = event.args.amount;
-      totalBurned += parseFloat(amount);
+
+      //get the feeBips at the respective block number by passing in the appropriate optional flag
+      const LSDVault = new ethers.Contract(contract_addresses.LSDVault, LSDVaultABI, provider);
+      let feeBips = parseFloat(await LSDVault.redeemFee({blockTag: event.blockNumber}));
+
+      //calcualte the fee amount
+      const feeAmount = amount * feeBips / 10000;
+
+      //add the fee amount to the total fee
+      totalFee += feeAmount;
     }
 
-    const LSDVault = new ethers.Contract(contract_addresses.LSDVault, LSDVaultABI, provider);
-    let feeBips = parseFloat(await LSDVault.redeemFee());
-
-    // console.log({totalBurned});
-    const feeAmount = totalBurned * feeBips / 10000;
     // console.log({feeAmount});
     const totalSupply = parseFloat(await contract.totalSupply());
     // console.log({totalSupply});
-    const apr = ((feeAmount * 52) / parseFloat(totalSupply)) * 100;
+    const apr = ((totalFee * 52) / parseFloat(totalSupply)) * 100;
 
     return apr;
   } catch (e) {

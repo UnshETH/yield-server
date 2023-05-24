@@ -25,6 +25,7 @@ async function getLSDPrices() {
     rETH: 'rocket-pool-eth',
     wstETH: 'staked-ether',
     cbETH: 'coinbase-wrapped-staked-eth',
+    WETH: 'weth'
   };
 
   let prices = {
@@ -32,6 +33,7 @@ async function getLSDPrices() {
     rETH: (await axios.get(`https://coins.llama.fi/prices/current/coingecko:${coingeckoIds.rETH}`)).data.coins[`coingecko:${coingeckoIds.rETH}`]?.price,
     wstETH: (await axios.get(`https://coins.llama.fi/prices/current/coingecko:${coingeckoIds.wstETH}`)).data.coins[`coingecko:${coingeckoIds.wstETH}`]?.price,
     cbETH: (await axios.get(`https://coins.llama.fi/prices/current/coingecko:${coingeckoIds.cbETH}`)).data.coins[`coingecko:${coingeckoIds.cbETH}`]?.price,
+    WETH: (await axios.get(`https://api.unsheth.xyz/price/WETH`)).data.price
   }
 
   return prices
@@ -45,7 +47,8 @@ async function getTotalTVL(){
     sfrxETH: parseFloat(lsdVaultTokenBalances.sfrxETH)/denomination * lsdPrices.sfrxETH,
     cbETH: parseFloat(lsdVaultTokenBalances.cbETH)/denomination * lsdPrices.cbETH,
     rETH: parseFloat(lsdVaultTokenBalances.rETH)/denomination * lsdPrices.rETH,
-    wstETH: parseFloat(lsdVaultTokenBalances.wstETH)/denomination * lsdPrices.wstETH
+    wstETH: parseFloat(lsdVaultTokenBalances.wstETH)/denomination * lsdPrices.wstETH,
+    WETH: parseFloat(lsdVaultTokenBalances.WETH)/denomination * lsdPrices.WETH
   }
 
   let totalUsdBalance = 0;

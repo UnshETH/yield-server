@@ -9,6 +9,7 @@ const coingeckoIds = {
     rETH: 'rocket-pool-eth',
     wstETH: 'staked-ether',
     cbETH: 'coinbase-wrapped-staked-eth',
+    WETH: 'weth'
 };
 
 
@@ -16,7 +17,8 @@ const tokensToCheck = [
 "sfrxETH",
 "rETH",
 "wstETH",
-"cbETH"
+"cbETH",
+'WETH'
 ];
 
 const ETHEREUM_RPC_URL = process.env.ALCHEMY_CONNECTION_ETHEREUM;
