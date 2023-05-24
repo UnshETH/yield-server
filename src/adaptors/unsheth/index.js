@@ -1,5 +1,6 @@
-const unshETHFarm = require('./unsheth-farm');
-const BNBunshETHFarm = require('./bnb-unsheth-farm');
+const unshETH = require('./unshETH/eth');
+const BNBunshETH = require('./unshETH/bnb');
+const ARBunshETH = require('./unshETH/arb');
 const sushiFarm = require('./ush-weth-sushi');
 const pancakeFarm = require('./ush-bnb-pancake');
 
@@ -26,14 +27,16 @@ const pancakeFarm = require('./ush-bnb-pancake');
 
 
 const getApy = async () => {
-  let unshETHPool = await unshETHFarm.getPoolInfo();
-  let bnbUnshETHPool = await BNBunshETHFarm.getPoolInfo();
+  let unshETHPool = await unshETH.getPoolInfo();
+  let bnbUnshETHPool = await BNBunshETH.getPoolInfo();
+  let arbUnshETHPool = await ARBunshETH.getPoolInfo();
   let sushiPool = await sushiFarm.getPoolInfo();
   let pancakePool = await pancakeFarm.getPoolInfo();
 
   return [
     unshETHPool,
     bnbUnshETHPool,
+    arbUnshETHPool,
     sushiPool,
     pancakePool
   ]
